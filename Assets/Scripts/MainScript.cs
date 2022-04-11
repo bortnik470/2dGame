@@ -5,23 +5,23 @@ namespace MainScriptt
 {
     public class MainScript : MonoBehaviour
     {
-        protected Rigidbody2D rigidBody;
-        protected Animator animator;
-        protected SpriteRenderer chSprite;
-        protected BoxCollider2D boxCollider2D;
+        private Rigidbody2D rigidBody;
+        private Animator animator;
+        private SpriteRenderer chSprite;
+        private BoxCollider2D boxCollider2D;
         private DamageScript dm;
 
         private Vector2 moveCoord; //Вектор для хранение координат движения х - левая координата, у - правая
 
-        protected bool goRight = true; //Указывает может ли персонаж идти на право
-        protected bool stop = false; //Если персонажу нужно остановиться указать true
-        
-        public float stopTime = 2f;
-        public int damage = 20; // Базове значення
-        public float attackTime = 1f;
-        public float nextAttack = 0f;
-        public float attackRange;
-        public float speed = 10f;
+        private bool goRight = true; //Указывает может ли персонаж идти на право
+        private bool stop = false; //Если персонажу нужно остановиться указать true
+
+        [SerializeField] private float stopTime = 2f;
+        [SerializeField] private int damage = 20; // Базове значення
+        [SerializeField] private float attackTime = 1f;
+        [SerializeField] private float nextAttack = 0f;
+        [SerializeField] private float attackRange;
+        [SerializeField] private float speed = 10f;
 
         private IEnumerator StayTime() //Остановка персонажа на 2 секунды
         {
@@ -31,14 +31,7 @@ namespace MainScriptt
             stop = false;
         }
 
-        public IEnumerator AttackTime() //Зупинка на атаку(анімацію)
-        {
-            stop = true;
-            yield return new WaitForSeconds(stopTime);
-            stop = false;
-        }
-
-        public IEnumerator AttackTime(Collider2D hit) //Зупинка на атаку(анімацію)
+        private IEnumerator AttackTime(Collider2D hit) //Зупинка на атаку(анімацію)
         {
             stop = true;
             yield return new WaitForSeconds(stopTime / 2);
@@ -47,13 +40,13 @@ namespace MainScriptt
             stop = false;
         }
 
-        public void setCoord(Vector2 coord) //Установка координат движения где coord указывет смещение персонажа
+        private void setCoord(Vector2 coord) //Установка координат движения где coord указывет смещение персонажа
         {
             float curentPos = transform.position.x;
             moveCoord = new Vector2(curentPos + coord.x, curentPos + coord.y);
         }
 
-        public void setComp()
+        private void setComp()
         {
             dm = GetComponent<DamageScript>();
             boxCollider2D = GetComponent<BoxCollider2D>();
@@ -62,12 +55,12 @@ namespace MainScriptt
             chSprite = GetComponent<SpriteRenderer>();
         }
 
-        virtual public void Start()
+        private void Start()
         {
             setComp();
         }
 
-        virtual public void Update()
+        private void Update()
         {
             if (dm.isDeath)
             {
@@ -80,7 +73,7 @@ namespace MainScriptt
             Run();
         }
 
-        virtual public void Run() // Бег по заданым координатам 
+        private void Run() // Бег по заданым координатам 
         {
             float dirX = 0; //Сторона смещения персонажа
 
@@ -97,7 +90,7 @@ namespace MainScriptt
             rigidBody.velocity = new Vector2(dirX * speed, rigidBody.velocity.y); // Смена х координат для движения
         }
 
-        virtual public void Attack()
+        private void Attack()
         {
             LayerMask PlayerMask = LayerMask.GetMask("Player");
             Vector2 side = Vector2.zero;
